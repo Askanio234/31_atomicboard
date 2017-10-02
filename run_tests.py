@@ -1,8 +1,10 @@
+import os
 import unittest
 import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
+PATH_TO_PHANTOM = os.getenv("path_to_phantom")
 
 target_URL = "http://atomicboard.devman.org/"
 
@@ -24,7 +26,7 @@ class AtomicBoardTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(AtomicBoardTest):
-        AtomicBoardTest.driver = webdriver.PhantomJS()
+        AtomicBoardTest.driver = webdriver.PhantomJS(PATH_TO_PHANTOM)
         AtomicBoardTest.driver.set_window_size(1120, 550)
         AtomicBoardTest.driver.implicitly_wait(5)
         AtomicBoardTest.css_selector_for_ticket = "div.js-ticket"
