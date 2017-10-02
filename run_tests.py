@@ -57,16 +57,16 @@ class AtomicBoardTest(unittest.TestCase):
     def test_create_new_ticket(self):
         driver = self.driver
         num_tickets = len(find_elements(
-                                    driver,
-                                    "css_selector",
-                                    AtomicBoardTest.css_selector_for_ticket))
+            driver,
+            "css_selector",
+            AtomicBoardTest.css_selector_for_ticket))
         elem = find_elements(driver, "class_name",
                              AtomicBoardTest.class_for_add_ticket_btn)[0]
         elem.click()
         input_elem = find_elements(
-                                driver,
-                                "class_name",
-                                AtomicBoardTest.class_for_add_ticket_input)[0]
+            driver,
+            "class_name",
+            AtomicBoardTest.class_for_add_ticket_input)[0]
         input_elem.clear()
         input_elem.send_keys("Go to Pycon")
         input_elem.send_keys(Keys.RETURN)
@@ -83,10 +83,10 @@ class AtomicBoardTest(unittest.TestCase):
         ticket_text.click()
         new_ticket_text = "go to meetup"
         input_field = find_elements(
-                            driver,
-                            "class_name",
-                            AtomicBoardTest.class_name_for_eddit_ticket_input
-                            )[0]
+            driver,
+            "class_name",
+            AtomicBoardTest.class_name_for_eddit_ticket_input
+        )[0]
         input_field.clear()
         input_field.send_keys(new_ticket_text)
         input_field.send_keys(Keys.RETURN)
@@ -98,10 +98,10 @@ class AtomicBoardTest(unittest.TestCase):
     def test_mark_ticket_complete(self):
         driver = self.driver
         ticket_status = find_elements(
-                                driver,
-                                "class_name",
-                                AtomicBoardTest.class_name_for_ticket_status
-                                )[0]
+            driver,
+            "class_name",
+            AtomicBoardTest.class_name_for_ticket_status
+        )[0]
         ticket_status.click()
         time.sleep(5)
         button_close_ticket = find_elements(
@@ -109,10 +109,10 @@ class AtomicBoardTest(unittest.TestCase):
         ticket_new_status = button_close_ticket.text
         button_close_ticket.click()
         ticket_status = find_elements(
-                                driver,
-                                "class_name",
-                                AtomicBoardTest.class_name_for_ticket_status
-                                )[0].text
+            driver,
+            "class_name",
+            AtomicBoardTest.class_name_for_ticket_status
+        )[0].text
         self.assertEqual(ticket_status, ticket_new_status,
                          msg="Не удалось изменить статус задачи")
 
@@ -120,15 +120,15 @@ class AtomicBoardTest(unittest.TestCase):
         driver = self.driver
         driver.set_script_timeout(30)
         tickets_columns = find_elements(
-                                    driver,
-                                    "css_selector",
-                                    AtomicBoardTest.css_selector_for_ticket_column
-                                    )
+            driver,
+            "css_selector",
+            AtomicBoardTest.css_selector_for_ticket_column
+        )
         tickets_second_column = tickets_columns[1]
         tickets_in_second_column = tickets_second_column.\
-                            find_elements_by_css_selector(
-                                                AtomicBoardTest.css_selector_for_ticket
-                                                )
+            find_elements_by_css_selector(
+                AtomicBoardTest.css_selector_for_ticket
+            )
         num_tickets_in_second_column = len(tickets_in_second_column)
         with open("jquery_load_helper.js") as f:
             load_jquery_js = f.read()
@@ -136,20 +136,20 @@ class AtomicBoardTest(unittest.TestCase):
             drag_and_drop_js = f.read()
         driver.execute_async_script(load_jquery_js, jquery_url)
         driver.execute_script(
-                            drag_and_drop_js +
-                            "$('div.js-ticket:eq(0)')."
-                            "simulateDragDrop({ dropTarget:"
-                            "'span.tickets-column:eq(1)'});"
-                            )
+            drag_and_drop_js +
+            "$('div.js-ticket:eq(0)')."
+            "simulateDragDrop({ dropTarget:"
+            "'span.tickets-column:eq(1)'});"
+        )
         new_tickets_in_second_column = tickets_second_column.\
-                                    find_elements_by_css_selector(
-                                                    AtomicBoardTest.css_selector_for_ticket
-                                                    )
+            find_elements_by_css_selector(
+                AtomicBoardTest.css_selector_for_ticket
+            )
         new_num_of_tickets_in_second_column = len(new_tickets_in_second_column)
         self.assertEqual(
-                    new_num_of_tickets_in_second_column,
-                    num_tickets_in_second_column + 1,
-                    msg="Не удалось перетащить задачу в другую колонку")
+            new_num_of_tickets_in_second_column,
+            num_tickets_in_second_column + 1,
+            msg="Не удалось перетащить задачу в другую колонку")
 
     @classmethod
     def tearDownClass(AtomicBoardTest):
