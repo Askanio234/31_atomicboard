@@ -6,9 +6,9 @@ from selenium.webdriver.common.keys import Keys
 
 PATH_TO_PHANTOM = os.getenv("path_to_phantom")
 
-target_URL = "http://atomicboard.devman.org/"
+target_url = "http://atomicboard.devman.org/"
 
-create_user_URL = "http://atomicboard.devman.org/create_test_user/"
+create_user_url = "http://atomicboard.devman.org/create_test_user/"
 
 jquery_url = "http://code.jquery.com/jquery-1.11.2.min.js"
 
@@ -37,12 +37,12 @@ class AtomicBoardTest(unittest.TestCase):
         AtomicBoardTest.class_name_for_ticket_status = "ticket_status"
         AtomicBoardTest.css_selector_for_ticket_column = "span.tickets-column"
         driver = AtomicBoardTest.driver
-        driver.get(create_user_URL)
+        driver.get(create_user_url)
         button = find_elements(driver, "tag_name", "button")[0]
         button.click()
 
     def setUp(self):
-        self.driver.get(target_URL)
+        self.driver.get(target_url)
 
     def test_if_page_served(self):
         self.assertIn(
