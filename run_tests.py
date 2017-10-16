@@ -1,8 +1,11 @@
 import os
 import unittest
-import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+
 
 PATH_TO_PHANTOM = os.getenv("path_to_phantom")
 
@@ -11,6 +14,8 @@ target_url = "http://atomicboard.devman.org/"
 create_user_url = "http://atomicboard.devman.org/create_test_user/"
 
 jquery_url = "http://code.jquery.com/jquery-1.11.2.min.js"
+
+TIMEOUT = 10
 
 
 def find_elements(driver, method, element):
@@ -72,7 +77,10 @@ class AtomicBoardTest(unittest.TestCase):
         input_elem.clear()
         input_elem.send_keys("Go to Pycon")
         input_elem.send_keys(Keys.RETURN)
-        time.sleep(5)
+        wait = WebDriverWait(self.driver, TIMEOUT)
+        new_task_xpath = '//span[contains(.,"Go to Pycon")]'
+        wait.until(EC.visibility_of_element_located((By.XPATH,
+                                                     new_task_xpath)))
         new_num_of_tickets = len(find_elements(
             driver, "css_selector", AtomicBoardTest.css_selector_for_ticket))
         self.assertGreater(new_num_of_tickets, num_tickets,
@@ -105,7 +113,9 @@ class AtomicBoardTest(unittest.TestCase):
             AtomicBoardTest.class_name_for_ticket_status
         )[0]
         ticket_status.click()
-        time.sleep(5)
+        wait = WebDriverWait(driver, TIMEOUT)
+        modal_window_class = 'modal-content'
+        wait.until(EC.visibility_of_element_located((By.CLASS_NAME, modal_window_class)))
         button_close_ticket = find_elements(
             driver, "class_name", "btn-primary")[0]
         ticket_new_status = button_close_ticket.text
