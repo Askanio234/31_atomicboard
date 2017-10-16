@@ -46,7 +46,8 @@ class AtomicBoardTest(unittest.TestCase):
         button.click()
         wait = WebDriverWait(driver, TIMEOUT)
         create_user_success = '//p[contains(., "Сделано.")]'
-        wait.until(EC.visibility_of_element_located((By.XPATH, create_user_success)))
+        wait.until(EC.visibility_of_element_located(
+            (By.XPATH, create_user_success)))
         driver.get(TARGET_URL)
 
     def test_if_page_served(self):
@@ -148,12 +149,11 @@ class AtomicBoardTest(unittest.TestCase):
         with open("drag_and_drop_helper.js") as f:
             drag_and_drop_js = f.read()
         driver.execute_async_script(load_jquery_js, JQUERY_URL)
-        driver.execute_script(
-            drag_and_drop_js +
-            "$('div.js-ticket:eq(0)')."
-            "simulateDragDrop({ dropTarget:"
-            "'span.tickets-column:eq(1)'});"
-        )
+        target_and_destination_helpers = """$('div.js-ticket:eq(0)').
+                                        simulateDragDrop({ dropTarget:
+                                        'span.tickets-column:eq(1)'});"""
+        driver.execute_script("{}{}".format(
+            drag_and_drop_js, target_and_destination_helpers))
         new_tickets_in_second_column = tickets_second_column.\
             find_elements_by_css_selector(
                 AtomicBoardTest.css_selector_for_ticket
