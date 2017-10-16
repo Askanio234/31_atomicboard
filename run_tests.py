@@ -9,11 +9,11 @@ from selenium.webdriver.common.by import By
 
 PATH_TO_PHANTOM = os.getenv("path_to_phantom")
 
-target_url = "http://atomicboard.devman.org/"
+TARGET_URL = "http://atomicboard.devman.org/"
 
-create_user_url = "http://atomicboard.devman.org/create_test_user/"
+CREATE_USER_URL = "http://atomicboard.devman.org/create_test_user/"
 
-jquery_url = "http://code.jquery.com/jquery-1.11.2.min.js"
+JQUERY_URL = "http://code.jquery.com/jquery-1.11.2.min.js"
 
 TIMEOUT = 10
 
@@ -42,12 +42,12 @@ class AtomicBoardTest(unittest.TestCase):
         AtomicBoardTest.class_name_for_ticket_status = "ticket_status"
         AtomicBoardTest.css_selector_for_ticket_column = "span.tickets-column"
         driver = AtomicBoardTest.driver
-        driver.get(create_user_url)
+        driver.get(CREATE_USER_URL)
         button = find_elements(driver, "tag_name", "button")[0]
         button.click()
 
     def setUp(self):
-        self.driver.get(target_url)
+        self.driver.get(TARGET_URL)
 
     def test_if_page_served(self):
         self.assertIn(
@@ -115,7 +115,8 @@ class AtomicBoardTest(unittest.TestCase):
         ticket_status.click()
         wait = WebDriverWait(driver, TIMEOUT)
         modal_window_class = 'modal-content'
-        wait.until(EC.visibility_of_element_located((By.CLASS_NAME, modal_window_class)))
+        wait.until(EC.visibility_of_element_located(
+            (By.CLASS_NAME, modal_window_class)))
         button_close_ticket = find_elements(
             driver, "class_name", "btn-primary")[0]
         ticket_new_status = button_close_ticket.text
@@ -146,7 +147,7 @@ class AtomicBoardTest(unittest.TestCase):
             load_jquery_js = f.read()
         with open("drag_and_drop_helper.js") as f:
             drag_and_drop_js = f.read()
-        driver.execute_async_script(load_jquery_js, jquery_url)
+        driver.execute_async_script(load_jquery_js, JQUERY_URL)
         driver.execute_script(
             drag_and_drop_js +
             "$('div.js-ticket:eq(0)')."
