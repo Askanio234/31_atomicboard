@@ -1,3 +1,8 @@
+/* 
+This helper code is from SO topic
+How to simulate drag and drop in Selenium:
+https://stackoverflow.com/questions/29381233/how-to-simulate-html5-drag-and-drop-in-selenium-webdriver/29381532
+*/ 
 (function( $ ) {
         $.fn.simulateDragDrop = function(options) {
                 return this.each(function() {
