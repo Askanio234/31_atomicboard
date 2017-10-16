@@ -29,25 +29,25 @@ def find_elements(driver, method, element):
 
 class AtomicBoardTest(unittest.TestCase):
 
-    @classmethod
-    def setUpClass(AtomicBoardTest):
-        AtomicBoardTest.driver = webdriver.PhantomJS(PATH_TO_PHANTOM)
-        AtomicBoardTest.driver.set_window_size(1120, 550)
-        AtomicBoardTest.driver.implicitly_wait(5)
-        AtomicBoardTest.css_selector_for_ticket = "div.js-ticket"
-        AtomicBoardTest.class_for_add_ticket_btn = "add-ticket-block_button"
-        AtomicBoardTest.class_for_add_ticket_input = "editable-has-buttons"
-        AtomicBoardTest.class_for_ticket_text = "panel-heading_text"
-        AtomicBoardTest.class_name_for_eddit_ticket_input = "editable-input"
-        AtomicBoardTest.class_name_for_ticket_status = "ticket_status"
-        AtomicBoardTest.css_selector_for_ticket_column = "span.tickets-column"
-        driver = AtomicBoardTest.driver
+    css_selector_for_ticket = "div.js-ticket"
+    class_for_add_ticket_btn = "add-ticket-block_button"
+    class_for_add_ticket_input = "editable-has-buttons"
+    class_for_ticket_text = "panel-heading_text"
+    class_name_for_eddit_ticket_input = "editable-input"
+    class_name_for_ticket_status = "ticket_status"
+    css_selector_for_ticket_column = "span.tickets-column"
+
+    def setUp(self):
+        self.driver = webdriver.PhantomJS(PATH_TO_PHANTOM)
+        driver = self.driver
+        driver.implicitly_wait(5)
         driver.get(CREATE_USER_URL)
         button = find_elements(driver, "tag_name", "button")[0]
         button.click()
-
-    def setUp(self):
-        self.driver.get(TARGET_URL)
+        wait = WebDriverWait(driver, TIMEOUT)
+        create_user_success = '//p[contains(., "Сделано.")]'
+        wait.until(EC.visibility_of_element_located((By.XPATH, create_user_success)))
+        driver.get(TARGET_URL)
 
     def test_if_page_served(self):
         self.assertIn(
@@ -164,9 +164,8 @@ class AtomicBoardTest(unittest.TestCase):
             num_tickets_in_second_column + 1,
             msg="Не удалось перетащить задачу в другую колонку")
 
-    @classmethod
-    def tearDownClass(AtomicBoardTest):
-        AtomicBoardTest.driver.close()
+    def tearDown(self):
+        self.driver.close()
 
 
 if __name__ == "__main__":
